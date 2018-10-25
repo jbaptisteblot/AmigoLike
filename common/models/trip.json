@@ -1,0 +1,44 @@
+{
+  "name": "trip",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "beginLocation": {
+      "type": "string"
+    },
+    "endLocation": {
+      "type": "string",
+      "required": true
+    },
+    "beginDate": {
+      "type": "date",
+      "required": true
+    },
+    "endDate": {
+      "type": "date",
+      "required": true
+    },
+    "price": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "reservations": {
+      "type": "hasAndBelongsToMany",
+      "model": "reservation",
+      "foreignKey": ""
+    },
+    "travel": {
+      "type": "belongsTo",
+      "model": "travel",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

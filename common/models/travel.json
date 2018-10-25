@@ -1,0 +1,30 @@
+{
+  "name": "travel",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "numberPassengers": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "trips": {
+      "type": "hasMany",
+      "model": "trip",
+      "foreignKey": ""
+    },
+    "owner": {
+      "type": "belongsTo",
+      "model": "Utilisateur",
+      "foreignKey": "owner"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Utilisateur",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "surname": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "travels": {
+      "type": "hasMany",
+      "model": "travel",
+      "foreignKey": "owner"
+    },
+    "reservations": {
+      "type": "hasMany",
+      "model": "reservation",
+      "foreignKey": "owner"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
