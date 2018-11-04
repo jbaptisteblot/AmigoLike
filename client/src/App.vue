@@ -12,27 +12,24 @@
             <router-link to="/" class="nav-link" >Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/login" class="nav-link">Login</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/register" class="nav-link">Register</router-link>
-          </li>
-          <li class="nav-item">
             <router-link to="/profile" class="nav-link">Profile</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/about" class="nav-link">About</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/myTravels" class="nav-link">Mes voyages</router-link>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
-
+        <login-menu v-bind:userlogged="userlogged"></login-menu>
       </div>
     </nav>
     <div class="container">
-      <router-view/>
+      <router-view v-on:user-logged="userLogged"/>
     </div>
   </div>
 </template>
@@ -45,16 +42,29 @@
   text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-}
 
 #nav a {
   font-weight: bold;
   color: #2c3e50;
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
+<script>
+  import LoginMenu from "./components/loginMenu";
+  export default {
+    components: {LoginMenu},
+    data() {
+      return {
+        userlogged: false
+      }
+    },
+    methods : {
+      userLogged(loggedUserBool) {
+        this.userlogged = loggedUserBool;
+      }
+    },
+    created() {
+      if(localStorage.getItem("accessId") !== null)
+        this.userlogged = true;
+    }
+  }
+</script>

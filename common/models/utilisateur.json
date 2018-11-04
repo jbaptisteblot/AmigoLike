@@ -29,7 +29,7 @@
     "reservations": {
       "type": "hasMany",
       "model": "reservation",
-      "foreignKey": "owner"
+      "foreignKey": ""
     }
   },
   "acls": [],

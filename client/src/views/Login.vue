@@ -45,6 +45,7 @@
               .then(response => {
                 localStorage.setItem("accessId", response.data.id);
                 localStorage.setItem("userId", response.data.userId);
+                this.$emit('user-logged', true);
                 this.$router.push("/");
               })
               .catch(() => {

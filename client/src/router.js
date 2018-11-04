@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Login from './components/Login.vue'
-import Register from './components/Register.vue'
-import Profile from './components/Profile.vue'
+import Login from './views/Login.vue'
+import Register from './views/Register.vue'
+import Profile from './views/Profile.vue'
+import Logout from './components/logout'
+import Search from './views/Search'
 Vue.use(Router);
 
 export default new Router({
@@ -18,6 +20,10 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    }, {
+      path: '/logout',
+      name: 'logout',
+      component: Logout
     },{
       path: '/register',
       name: 'register',
@@ -27,6 +33,11 @@ export default new Router({
       path: '/profile',
       name: 'profile',
       component: Profile
+    },
+    {
+      path: '/search/:villeDepart/:villeArrive',
+      name: 'search',
+      component: Search
     },
     {
       path: '/about',
