@@ -1,8 +1,6 @@
 <template>
   <div>
-    Bonjour {{userProfile.username}}
-    Vos prochaines réservations :
-
+    Bonjour {{userProfile.name}} {{userProfile.surname}} <br>
   </div>
 </template>
 
@@ -19,11 +17,7 @@
       },
       methods : {
         loadProfile() {
-          this.$http.get("Utilisateurs/" + localStorage.getItem("userId"),
-             {
-            firstName: 'Fred',
-              lastName: 'Flintstone'
-          }).then(response => {
+          this.$http.get("Utilisateurs/" + localStorage.getItem("userId")).then(response => {
             this.userProfile = response.data;
           }).catch(error => console.log(error))
         }
