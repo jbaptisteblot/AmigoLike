@@ -6,6 +6,7 @@ import Register from './views/Register.vue'
 import Profile from './views/Profile.vue'
 import Logout from './components/logout'
 import Search from './views/Search'
+import MyTravels from './views/MyTravels'
 Vue.use(Router);
 
 export default new Router({
@@ -40,11 +41,13 @@ export default new Router({
       component: Search
     },
     {
+      path: '/myTravels',
+      name: 'myTravels',
+      component: MyTravels
+    },
+    {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     }
   ]

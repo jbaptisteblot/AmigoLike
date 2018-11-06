@@ -28,7 +28,7 @@
         <login-menu v-bind:userlogged="userlogged"></login-menu>
       </div>
     </nav>
-    <div class="container m-3">
+    <div class="container mt-3">
       <router-view v-on:user-logged="userLogged"/>
     </div>
   </div>
