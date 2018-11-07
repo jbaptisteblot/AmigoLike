@@ -1,5 +1,6 @@
 <template>
     <div>
+      <create-travel></create-travel>
       <div v-for="travel in travels" v-bind:key="travel.id">
         {{travel.id}}
       </div>
@@ -7,9 +8,11 @@
 </template>
 
 <script>
+    import CreateTravel from "../components/CreateTravel";
     export default {
         name: "MyTravels",
-        data() {
+      components: {CreateTravel},
+      data() {
           return {
             travels: []
           }
