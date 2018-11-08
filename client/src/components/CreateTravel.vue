@@ -4,6 +4,9 @@
       <div class="card-body">
         <div>
           <div class="form-group">
+            <div v-if="this.error.length !== 0"  class="alert alert-danger">
+              {{error}}
+            </div>
             <h4>Ajouter un nouveau trajet</h4>
             <div class="form-group">
               <label for="numberPassengers">Nombre de passagers</label>
@@ -49,6 +52,7 @@
         name: "CreateTravel",
         data() {
           return {
+            error: '',
             beginLocation:'',
             nombrePassagers: '',
             beginDate: '',
@@ -82,10 +86,17 @@
               numberPassengers: this.nombrePassagers,
               owner: localStorage.getItem("userId")
             }).then(response => {
-              console.log(response.data.id);
+              let tripId = response.data.id;
+              let postPromises = [];
               this.trips.forEach(trip => {
-                this.$http.post('travels/' + response.data.id + '/trips', trip)
-              }).catch(error => console.log(error))
+
+                postPromises.push(this.$http.post('travels/' + tripId + '/trips',
+                  trip));
+              });
+              Promise.all(postPromises).then(response => {
+                this.$emit('new-trip', {id: tripId, numberPassengers: this.nombrePassagers, trips: this.trips});
+                console.log(response)
+              }).catch(error => this.error = error)
             }).catch(error => console.log(error))
           }
       },

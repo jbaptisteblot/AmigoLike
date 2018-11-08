@@ -7,6 +7,7 @@ import Profile from './views/Profile.vue'
 import Logout from './components/logout'
 import Search from './views/Search'
 import MyTravels from './views/MyTravels'
+import TravelDetail from './views/TravelDetail'
 Vue.use(Router);
 
 export default new Router({
@@ -44,6 +45,11 @@ export default new Router({
       path: '/myTravels',
       name: 'myTravels',
       component: MyTravels
+    },
+    {
+      path: 'travel/:travelId',
+      name: 'travelDetail',
+      component: TravelDetail
     },
     {
       path: '/about',

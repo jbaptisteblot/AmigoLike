@@ -1,8 +1,16 @@
 <template>
     <div>
-      <create-travel></create-travel>
+      <create-travel v-on:new-trip="addTravel"></create-travel>
       <div v-for="travel in travels" v-bind:key="travel.id">
-        {{travel.id}}
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title" v-if="travel.trips.length > 0">Votre trajet entre {{travel.trips[0].beginLocation}} et {{travel.trips[travel.trips.length -1].endLocation}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted" v-if="travel.trips.length > 0">{{travel.trips[0].beginDate}}</h6>
+            <p class="card-text"></p>
+            <router-link :to="{name: 'travelDetail', params: {travelId: travel.id}}" class="card-link">Voir la fiche du trajet</router-link>
+          </div>
+        </div>
+
       </div>
     </div>
 </template>
@@ -25,12 +33,15 @@
             this.$http.get("travels", {
               params: {
                 filter :
-                  {where:
+            {where:
                       {owner: localStorage.getItem("userId")},
                     include: "trips"
                   }
               }
             }).then(response => this.travels = response.data).catch(error => console.log(error))
+          },
+          addTravel(payload) {
+            this.travels.push(payload);
           }
         }
     }
