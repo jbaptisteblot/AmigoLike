@@ -12,6 +12,13 @@
           <li>
             Passages : {{travel.trips | beginningToEnd }}
           </li>
+          <li>
+            <!-- <button v-on:click="reserverVoyage(travel)">Reserver</button><br> -->
+            Utilisateur : {{ travel.owner }}<br>
+            Travel id : {{ travel.id }}<br>
+            Price : {{ travel.price }}<br>
+            <router-link v-bind:to="{name: 'travelDetails', params: {idTravel: travel.id, depart:this.$route.params.villeDepart , arrive: this.$route.params.villeArrive}}">Details</router-link>
+          </li>
         </ul>
       </div>
     </div>
@@ -22,9 +29,24 @@
     export default {
         name: "searchResult",
         props: ['travel'],
+        data() {
+            return {
+                begin: this.$route.params.villeDepart,
+                end: this.$route.params.villeArrive
+            }
+        },
+        created() {
+            console.log(this.travel);
+            this.travel.trips.forEach(trip => {
+                if (trip.beginLocation.localeCompare(this.begin) == 0 && trip.endLocation.localeCompare(this.end) == 0) {
+                    this.travel.price = trip.price;
+                }
+            });
+        },
         filters: {
           beginningToEnd: function(trips) {
             let villesArray = [];
+
             trips.forEach(trip => {
               if (villesArray.indexOf(trip.beginLocation) === -1)
                 villesArray.push(trip.beginLocation);
@@ -33,7 +55,12 @@
             });
             return villesArray.join(", ");
           }
-        }
+      },
+      methods: {
+          reserverVoyage(travel) {
+              console.log(travel);
+          }
+      }
     }
 </script>
 

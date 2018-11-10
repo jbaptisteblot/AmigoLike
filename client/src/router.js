@@ -7,48 +7,54 @@ import Profile from './views/Profile.vue'
 import Logout from './components/logout'
 import Search from './views/Search'
 import MyTravels from './views/MyTravels'
+import TravelDetails from './views/TravelDetails'
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },{
-      path: '/login',
-      name: 'login',
-      component: Login
-    }, {
-      path: '/logout',
-      name: 'logout',
-      component: Logout
-    },{
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: Profile
-    },
-    {
-      path: '/search/:villeDepart/:villeArrive',
-      name: 'search',
-      component: Search
-    },
-    {
-      path: '/myTravels',
-      name: 'myTravels',
-      component: MyTravels
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
-  ]
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: Home
+        },{
+            path: '/login',
+            name: 'login',
+            component: Login
+        }, {
+            path: '/logout',
+            name: 'logout',
+            component: Logout
+        },{
+            path: '/register',
+            name: 'register',
+            component: Register
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: Profile
+        },
+        {
+            path: '/search/:villeDepart/:villeArrive',
+            name: 'search',
+            component: Search
+        },
+        {
+            path: '/myTravels',
+            name: 'myTravels',
+            component: MyTravels
+        },
+        {
+            path: '/travelDetails/:idTravel/:depart/:arrive',
+            name: 'travelDetails',
+            component: TravelDetails
+        },
+        {
+            path: '/about',
+            name: 'about',
+            component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+        }
+    ]
 })
