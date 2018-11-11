@@ -7,7 +7,7 @@
             <h5 class="card-title" v-if="travel.trips.length > 0">Votre trajet entre {{travel.trips[0].beginLocation}} et {{travel.trips[travel.trips.length -1].endLocation}}</h5>
             <h6 class="card-subtitle mb-2 text-muted" v-if="travel.trips.length > 0">{{travel.trips[0].beginDate}}</h6>
             <p class="card-text"></p>
-            <router-link :to="{name: 'travelDetail', params: {travelId: travel.id}}" class="card-link">Voir la fiche du trajet</router-link>
+            <router-link :to="{name: 'travelDetails', params: {idTravel: travel.id}}" class="card-link">Voir la fiche du trajet</router-link>
           </div>
         </div>
 

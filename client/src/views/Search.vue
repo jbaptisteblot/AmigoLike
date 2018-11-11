@@ -20,12 +20,14 @@
           return {
             villeDepart: "",
             villeArrive: "",
+            dateDepart: "",
             searchResult: []
           }
       },
       created()  {
           this.villeDepart = this.$route.params.villeDepart;
           this.villeArrive = this.$route.params.villeArrive;
+          this.dateDepart = this.$route.params.dateDepart;
           this.getSearchResults();
       },
       methods: {
@@ -33,7 +35,7 @@
             this.$http.post("travels/search", {
               lieuDepart: this.villeDepart,
               lieuArrivee: this.villeArrive,
-              dateDepart: ""
+              dateDepart: this.dateDepart
             }).then(response => {
               this.searchResult = response.data.travel;
             })

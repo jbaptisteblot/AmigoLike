@@ -37,7 +37,7 @@ export default new Router({
             component: Profile
         },
         {
-            path: '/search/:villeDepart/:villeArrive',
+            path: '/search/:villeDepart/:villeArrive/:dateDepart',
             name: 'search',
             component: Search
         },

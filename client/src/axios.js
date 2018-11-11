@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import router from './router'
+//import router from './router'
 
 const API_URL = "http://localhost:3000/api/";
 let axiosInstance = Axios.create({
@@ -16,8 +16,8 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(response => {
   return response;
 }, error => {
-  if (error.response.status === 401)
-    router.push("/login");
+  /**if (error.response.status === 401)
+    router.push("/login");*/
   return Promise.reject(error);
 });
 

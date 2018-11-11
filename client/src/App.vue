@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">AmigoLike</a>
+      <router-link to="/" class="navbar-brand">AmigoLike</router-link>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -60,11 +60,25 @@
     methods : {
       userLogged(loggedUserBool) {
         this.userlogged = loggedUserBool;
+      },
+      clearLocalStorage() {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("accessId");
       }
     },
     created() {
-      if(localStorage.getItem("accessId") !== null)
-        this.userlogged = true;
+      // On vérifie les accés de la personne à l'application
+      if(localStorage.getItem("accessId") !== null || localStorage.getItem("userId")) {
+        this.$http.get("Utilisateurs/" + localStorage.getItem("userId")).then(() => {
+          this.userlogged = true;
+        }).catch(() => {
+          this.clearLocalStorage();
+          this.userlogged = false;
+        })
+      } else {
+        this.userlogged = false;
+        this.clearLocalStorage();
+      }
     }
   }
 </script>
