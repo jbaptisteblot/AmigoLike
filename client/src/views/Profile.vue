@@ -37,6 +37,10 @@
           <label for="username" >Username</label>
           <input id="username" type="text" v-model="userProfile.username" class="form-control" required>
         </div>
+        <div class="form-group">
+          <label for="password" >Password</label>
+          <input id="password" type="password" v-model="password" class="form-control" required>
+        </div>
         <button type="submit" class="btn btn-outline-success" @click="updateProfil">
           Mise à jour
         </button>
@@ -95,6 +99,7 @@
         data() {
           return {
             errorMsg: "",
+            password: "",
             userProfile: {}
           }
         },
@@ -109,16 +114,21 @@
             }
           }).then(response => {
             this.userProfile = response.data;
-          }).catch(error => console.log(error))
+          }).catch(error => this.errorMsg = error.data)
         },
         updateProfil() {
-          this.$http.put('Utilisateurs', {
+          this.$http.put('Utilisateurs/' + this.userProfile.id, {
             email: this.userProfile.email,
             name: this.userProfile.name,
             surname : this.userProfile.surname,
             phone: this.userProfile.phone,
             username: this.userProfile.username,
+            password: this.password,
             id: this.userProfile.id
+          }).then(() => {
+            this.errorMsg = "Paramètres mis à jour."
+          }).catch(err => {
+            this.errorMsg = err.data;
           })
         },
         updatePreferences() {
@@ -135,7 +145,7 @@
           }).then(() => {
             this.errorMsg = "Paramètres mis à jour."
           }).catch(err => {
-            this.errorMsg = err;
+            this.errorMsg = err.data;
           })
         }
       }
