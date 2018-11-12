@@ -47,5 +47,9 @@
   "reservation": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "PreferencesVoyageur": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

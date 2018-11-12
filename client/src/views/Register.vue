@@ -25,10 +25,48 @@
             <label for="phone" >Téléphone</label>
             <input id="phone" type="tel" v-model="phone" class="form-control" required>
           </div>
-          <div class="form-group">
-            <label for="username" >Username</label>
-            <input id="username" type="text" v-model="username" class="form-control" required>
-           </div>
+        <div class="form-group">
+          <label for="username" >Username</label>
+          <input id="username" type="text" v-model="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="vehiculeType" >Votre type de véhicule</label>
+            <input id="vehiculeType" type="text" v-model="vehiculeType" class="form-control" required>
+          </div>
+        <div class="form-group">
+          <label for="vehiculeYear" >Année de votre véhicule</label>
+          <input id="vehiculeYear" type="text" v-model="vehiculeYear" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <label for="luggageSpace" >Espace pour vos bagages</label>
+            <input id="luggageSpace" type="text" v-model="luggageSpace" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <label class="form-check-label" for="smoking" >Fumer</label>
+            <input id="smoking" type="checkbox" v-model="smoking" class="form-check-input" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <label class="form-check-label" for="phoneAccess" >Autoriser l'accès au téléphone</label>
+            <input id="phoneAccess" type="checkbox" v-model="phoneAccess" class="form-check-input" required>
+          </div>
+        </div>
+        <div class="form-group">
+        <div class="form-check">
+          <label class="form-check-label" for="emailAccess" >Access à l'email</label>
+          <input id="emailAccess" type="checkbox" v-model="emailAccess" class="form-check-input" required>
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="form-check">
+          <label class="form-check-label" for="climatisation" >Climatisation</label>
+          <input id="climatisation" type="checkbox" v-model="climatisation" class="form-check-input" required>
+        </div>
+        </div>
           <button type="submit" class="btn btn-outline-success" @click="handleSubmit">
             Register
           </button>
@@ -47,14 +85,21 @@
             phone :"",
             email : "",
             password : "",
-            username : ""
+            username : "",
+            vehiculeYear: 2018,
+            vehiculeType: "",
+            luggageSpace: "",
+            smoking: false,
+            phoneAccess: true,
+            emailAccess: true,
+            climatisation: true
           }
       },
       methods : {
         handleSubmit(e){
           e.preventDefault();
           if (this.password.length > 0) {
-            this.$http.post('http://localhost:3000/api/Utilisateurs', {
+            this.$http.post('Utilisateurs', {
               email: this.email,
               password: this.password,
               name: this.name,
@@ -62,7 +107,17 @@
               phone: this.phone,
               username: this.username
             })
-              .then(() => {
+              .then((response) => {
+                this.$http.post('PreferencesVoyageurs', {
+                  utilisateurId: response.data.id,
+                  smoking: this.smoking,
+                  phoneAccess: this.phoneAccess,
+                  emailAccess: this.emailAccess,
+                  climatisation: this.climatisation,
+                  luggageSpace: this.luggageSpace,
+                  vehiculeType: this.vehiculeType,
+                  vehiculeAge: this.vehiculeYear
+                });
                 this.$router.push("login");
               })
               .catch(function (error) {

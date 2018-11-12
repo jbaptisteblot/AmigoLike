@@ -30,6 +30,11 @@
       "type": "hasMany",
       "model": "reservation",
       "foreignKey": "owner"
+    },
+    "preferencesVoyageurs": {
+      "type": "hasOne",
+      "model": "PreferencesVoyageur",
+      "foreignKey": ""
     }
   },
   "acls": [],

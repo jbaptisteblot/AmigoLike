@@ -1,0 +1,50 @@
+{
+  "name": "PreferencesVoyageur",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "smoking": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "phoneAccess": {
+      "type": "boolean",
+      "required": true
+    },
+    "emailAccess": {
+      "type": "boolean",
+      "required": true
+    },
+    "climatisation": {
+      "type": "boolean",
+      "required": true
+    },
+    "luggageSpace": {
+      "type": "string",
+      "required": true
+    },
+    "vehiculeType": {
+      "type": "string",
+      "required": true,
+      "default": ""
+    },
+    "vehiculeAge": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "utilisateur": {
+      "type": "belongsTo",
+      "model": "Utilisateur",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
