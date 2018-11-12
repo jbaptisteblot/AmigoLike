@@ -34,7 +34,8 @@ export default new Router({
         {
             path: '/profile',
             name: 'profile',
-            component: Profile
+            component: Profile,
+            meta: {requireAuth : true}
         },
         {
             path: '/search/:villeDepart/:villeArrive/:dateDepart',
@@ -44,7 +45,8 @@ export default new Router({
         {
             path: '/myTravels',
             name: 'myTravels',
-            component: MyTravels
+            component: MyTravels,
+            meta: {requireAuth : true}
         },
         {
             path: '/travelDetails/:idTravel/:depart/:arrive',
