@@ -88,7 +88,6 @@
           price: price,
           owner: user
         }).then(reservation => {
-          console.log(reservation);
           let reservationId = reservation.data.id;
 
           let basePath = "reservations/" + reservationId + "/trips/rel/";
