@@ -35,14 +35,6 @@
                 end: this.$route.params.villeArrive
             }
         },
-        created() {
-            console.log(this.travel);
-            this.travel.trips.forEach(trip => {
-                if (trip.beginLocation.localeCompare(this.begin) == 0 && trip.endLocation.localeCompare(this.end) == 0) {
-                    this.travel.price = trip.price;
-                }
-            });
-        },
         filters: {
           beginningToEnd: function(trips) {
             let villesArray = [];

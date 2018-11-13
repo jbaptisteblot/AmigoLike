@@ -28,7 +28,7 @@
           <div v-for="(trip, index) in tripsToReservate" v-bind:key="trip.id">
             <b>Passage {{ index + 1 }}:</b> {{ trip.beginLocation }} prévu à {{ trip.beginDate }}
             <br>
-            <b>Places restantes : </b> {{travel.numberPassengers - trip.reservations.length}}
+            <b>Places restantes : {{ travel.numberPassengers - ((trip.reservations !== undefined)?trip.reservations.length:0) }}</b>
             <hr>
           </div>
         </div>
@@ -44,6 +44,7 @@
     name: "TravelDetails",
     data() {
       return {
+        reservationUser: '',
         travel: [],
         trips: [],
         villeDepart: this.$route.params.depart,
@@ -69,6 +70,7 @@
           this.travel = res.data;
           this.trips = this.travel.trips;
           this.searchDepartureFromEndLocation(this.villeArrive);
+          this.findReservationIdUser();
         });
       },
       reserverVoyage() {
@@ -84,15 +86,20 @@
           let reservationId = res.data.id;
 
           let basePath = "reservations/" + reservationId + "/trips/rel/";
-
-          for (let tripToReservate in this.tripsToReservate) {
+          this.reservationUser = reservationId;
+          this.tripsToReservate.forEach((tripToReservate, index) => {
             this.$http.put(basePath + tripToReservate.id, {
               reservationId: reservationId,
               tripId: tripToReservate.id
             }).then(res => {
-              console.log(res);
+              if(tripToReservate.reservations === undefined)
+                this.tripsToReservate[index].reservations = [res.data];
+              else {
+                this.tripsToReservate[index].reservations.push(res.data);
+              }
+              this.$forceUpdate();
             });
-          }
+          });
 
         });
       },
@@ -103,6 +110,16 @@
             this.searchDepartureFromEndLocation(trip.beginLocation);
           }
         }
+      },
+      findReservationIdUser: function() {
+        this.tripsToReservate.forEach(trip => {
+          if (trip.reservations !== undefined) {
+            trip.reservations.forEach(reservation => {
+              if(reservation.owner === localStorage.getItem('userId'))
+                this.reservationUser = reservation.id;
+            })
+          }
+        });
       }
     },
     filters: {
@@ -134,16 +151,12 @@
     },
     computed: {
       hasReserved: function () {
-        return (!this.tripsToReservate.some(trip => {
-          return trip.reservations.some(reservation => {
-            return reservation.owner !== localStorage.getItem("userId");
-          })
-        }));
+        return (this.reservationUser.length > 0)
       },
       remainingPlaces: function() {
         if (this.tripsToReservate[0] === undefined)
           return 0;
-        const reduceur = (accumulator, currentValue) => Math.min(accumulator, this.travel.numberPassengers - currentValue.reservations.length);
+        const reduceur = (accumulator, currentValue) => Math.min(accumulator, this.travel.numberPassengers - ((currentValue.reservations !== undefined)?currentValue.reservations.length:0));
         return this.tripsToReservate.reduce(reduceur, this.travel.numberPassengers);
       },
       canReserve: function() {
