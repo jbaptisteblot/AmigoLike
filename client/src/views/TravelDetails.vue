@@ -40,8 +40,42 @@
       </div>
     </div>
     <br>
-    <button class="btn btn-success btn-lg" v-if="canReserve" v-on:click="reserverVoyage(travel)">Reserver</button>
-    <button class="btn btn-danger btn-lg" v-if="hasReserved" v-on:click="cancelReservation()">Annuler réservation</button>
+    <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#paymentModal">
+        Réserver
+    </button>
+
+    <button class="btn btn-danger btn-lg" v-if="hasReserved" v-on:click="cancelReservation()">
+        Annuler réservation
+    </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paiementModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paiementModalLabel">Paiement</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Pour pouvoir faire la réservation, il faut d'abord procéder au paiement de
+          <strong>${{ trips | calculatePrice(villeDepart, villeArrive)}}</strong>.
+          <hr>
+
+          <label for="paiementInput">Veuillez entrer un montant</label>
+          <input type="number" class="form-control" v-model="montant" aria-describedby="paiementHelp" placeholder="">
+          <small id="paiementHelp" class="form-text text-muted">Entrer un nombre egal au montant demandé.</small>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" v-if="processPaiementByBank()" v-on:click="reserverVoyage(travel)" data-dismiss="modal">
+              Payer & Réserver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -57,7 +91,8 @@
         villeArrive: this.$route.params.arrive,
         tripsToReservate: [],
         n: 0,
-        owner: {}
+        owner: {},
+        montant: 0
       }
     },
     created() {
@@ -85,6 +120,7 @@
         let price = this.$options.filters.calculatePrice(this.trips, this.villeDepart, this.villeArrive);
 
         this.$http.post("reservations", {
+          paid: true,
           price: price,
           owner: user
         }).then(reservation => {
@@ -137,7 +173,14 @@
             })
           }
         });
-      }
+      },
+    processPaiementByBank: function() {
+        if (this.montant == this.$options.filters.calculatePrice(this.trips, this.villeDepart, this.villeArrive)) {
+            return true;
+        }
+        
+        return false;
+     }
     },
     filters: {
       beginningToEnd: function (trips) {
