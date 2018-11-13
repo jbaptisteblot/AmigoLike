@@ -1,5 +1,5 @@
 {
-  "name": "Amigo",
+  "name": "amigo",
   "version": "1.0.0",
   "main": "server/server.js",
   "engines": {
@@ -8,7 +8,12 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "vue-serve": "cd client && vue-cli-service serve",
+    "vue-build": "cd client && vue-cli-service build",
+    "dev": "concurrently --kill-others \"npm run vue-serve\" \"npm run lb-start\"",
+    "prod": "npm run vue-build && npm start",
+    "lb-start": "nodemon"
   },
   "dependencies": {
     "compression": "^1.0.3",
@@ -19,11 +24,20 @@
     "loopback-component-explorer": "^6.2.0",
     "loopback-connector-mongodb": "^3.9.0",
     "serve-favicon": "^2.0.1",
-    "strong-error-handler": "^3.0.0"
+    "strong-error-handler": "^3.0.0",
+    "axios": "^0.18.0",
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-eslint": "^3.0.5",
+    "@vue/cli-service": "^3.0.5",
+    "concurrently": "^4.0.1",
     "eslint": "^3.17.1",
-    "eslint-config-loopback": "^8.0.0"
+    "eslint-config-loopback": "^8.0.0",
+    "nodemon": "^1.17.5",
+    "vue-template-compiler": "^2.5.17"
   },
   "repository": {
     "type": "",
