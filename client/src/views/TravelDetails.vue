@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+    <div v-if="this.reservationUser.length !== 0"  class="alert alert-success">
+      Félicitation vous voyagez à bord de ce trajet, voici les informations du conducteur :
+      <p v-if="travel.owner.preferencesVoyageurs.phoneAccess">Téléphone : {{travel.owner.phone}}</p>
+      <p v-if="travel.owner.preferencesVoyageurs.emailAccess">Email : {{travel.owner.email}}</p>
+    </div>
     <h1>Détails du voyage</h1>
     <div class="row">
       <div class="card col-sm">
@@ -36,6 +41,7 @@
     </div>
     <br>
     <button class="btn btn-success btn-lg" v-if="canReserve" v-on:click="reserverVoyage(travel)">Reserver</button>
+    <button class="btn btn-danger btn-lg" v-if="hasReserved" v-on:click="cancelReservation()">Annuler réservation</button>
   </div>
 </template>
 
@@ -81,9 +87,9 @@
         this.$http.post("reservations", {
           price: price,
           owner: user
-        }).then(res => {
-          console.log(res);
-          let reservationId = res.data.id;
+        }).then(reservation => {
+          console.log(reservation);
+          let reservationId = reservation.data.id;
 
           let basePath = "reservations/" + reservationId + "/trips/rel/";
           this.reservationUser = reservationId;
@@ -91,17 +97,28 @@
             this.$http.put(basePath + tripToReservate.id, {
               reservationId: reservationId,
               tripId: tripToReservate.id
-            }).then(res => {
+            }).then(() => {
               if(tripToReservate.reservations === undefined)
-                this.tripsToReservate[index].reservations = [res.data];
+                this.tripsToReservate[index].reservations = [reservation.data];
               else {
-                this.tripsToReservate[index].reservations.push(res.data);
+                this.tripsToReservate[index].reservations.push(reservation.data);
               }
               this.$forceUpdate();
             });
           });
 
         });
+      },
+      cancelReservation() {
+        let url = "reservations/" + this.reservationUser + "/trips";
+        this.$http.delete(url).catch(err => console.log(err.data));
+        url = "reservations/" + this.reservationUser;
+        this.$http.delete(url).catch(err => console.log(err.data));
+        this.reservationUser = '';
+        this.tripsToReservate.forEach((trip, index) => {
+          this.tripsToReservate[index].reservations = trip.reservations.filter(reservation => reservation.owner !== localStorage.getItem('userId'))
+        });
+        this.$forceUpdate();
       },
       searchDepartureFromEndLocation(endTown) {
         for (var trip of this.trips) {
