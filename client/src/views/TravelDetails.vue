@@ -40,7 +40,7 @@
       </div>
     </div>
     <br>
-    <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#paymentModal">
+    <button class="btn btn-success btn-lg" data-toggle="modal" v-if="canReserve" data-target="#paymentModal">
         Réserver
     </button>
 
@@ -177,7 +177,7 @@
         if (this.montant == this.$options.filters.calculatePrice(this.trips, this.villeDepart, this.villeArrive)) {
             return true;
         }
-        
+
         return false;
      }
     },
