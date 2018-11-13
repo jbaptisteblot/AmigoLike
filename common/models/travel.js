@@ -1,4 +1,4 @@
-'use strict';
+
 function sameDay(d1, d2) {
   return d1.getFullYear() === d2.getFullYear() &&
     d1.getMonth() === d2.getMonth() &&
@@ -30,7 +30,9 @@ module.exports = function(Travel) {
         travelJson.trips.forEach(function(trip) {
           let remainingPlaces = travelJson.numberPassengers;
           if (trip.reservations !== undefined) {
-            remainingPlaces -= trip.reservations.length;
+            remainingPlaces -= trip.reservations.reduce(
+              (accumulator, currentValue) =>
+                accumulator + currentValue.place, 0);
           }
 
           trip.reservations = null;

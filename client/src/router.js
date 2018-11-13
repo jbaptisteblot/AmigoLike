@@ -7,6 +7,7 @@ import Profile from './views/Profile.vue'
 import Logout from './components/logout'
 import Search from './views/Search'
 import MyTravels from './views/MyTravels'
+import MyReservation from './views/MyReservation'
 import TravelDetails from './views/TravelDetails'
 Vue.use(Router);
 
@@ -46,6 +47,12 @@ export default new Router({
             path: '/myTravels',
             name: 'myTravels',
             component: MyTravels,
+            meta: {requireAuth : true}
+        },
+        {
+            path: '/myReservations',
+            name: 'myReservations',
+            component: MyReservation,
             meta: {requireAuth : true}
         },
         {

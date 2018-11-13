@@ -13,9 +13,6 @@
             Passages : {{travel.trips | beginningToEnd }}
           </li>
           <li>
-            <!-- <button v-on:click="reserverVoyage(travel)">Reserver</button><br> -->
-            Utilisateur : {{ travel.owner }}<br>
-            Travel id : {{ travel.id }}<br>
             Price : {{ travel.price }}<br>
             <router-link v-bind:to="{name: 'travelDetails', params: {idTravel: travel.id, depart:this.$route.params.villeDepart , arrive: this.$route.params.villeArrive}}">Details</router-link>
           </li>

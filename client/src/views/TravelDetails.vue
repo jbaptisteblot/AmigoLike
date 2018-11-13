@@ -33,7 +33,7 @@
           <div v-for="(trip, index) in tripsToReservate" v-bind:key="trip.id">
             <b>Passage {{ index + 1 }}:</b> {{ trip.beginLocation }} prévu à {{ trip.beginDate }}
             <br>
-            <b>Places restantes : {{ travel.numberPassengers - ((trip.reservations !== undefined)?trip.reservations.length:0) }}</b>
+            <b>Places restantes : {{ travel.numberPassengers - ((trip.reservations !== undefined)?trip.reservations.reduce((accumulator, currentValue) => accumulator + currentValue.place, 0):0) }}</b>
             <hr>
           </div>
         </div>
@@ -172,7 +172,8 @@
       remainingPlaces: function() {
         if (this.tripsToReservate[0] === undefined)
           return 0;
-        const reduceur = (accumulator, currentValue) => Math.min(accumulator, this.travel.numberPassengers - ((currentValue.reservations !== undefined)?currentValue.reservations.length:0));
+        const reduceurList = (accumulator, currentValue) => accumulator + currentValue.place;
+        const reduceur = (accumulator, currentValue) => Math.min(accumulator, this.travel.numberPassengers - ((currentValue.reservations !== undefined)?currentValue.reservations.reduce(reduceurList, 0):0));
         return this.tripsToReservate.reduce(reduceur, this.travel.numberPassengers);
       },
       canReserve: function() {
