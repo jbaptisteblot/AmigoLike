@@ -8,6 +8,7 @@
           <h6 class="card-subtitle mb-2 text-muted" v-if="reservation.trips.length > 0">{{reservation.trips[0].beginDate}}</h6>
           <hr>
           <p class="card-text">Nombre de places réservées : {{ reservation.place}}</p>
+          <p class="card-text">Prix payé : {{ reservation.price}} $</p>
           <div v-if="reservation.trips[0].ownerObj !== undefined">
             <b>Informations de contact</b>
             <p class="card-text">Trajet par : {{reservation.trips[0].ownerObj.name}} {{reservation.trips[0].ownerObj.surname}}</p>

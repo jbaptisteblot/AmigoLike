@@ -12,7 +12,7 @@
           <b>Départ : </b> {{ villeDepart}}<br>
           <b>Arrivée : </b> {{ villeArrive}}<br>
           <b>Passages</b> : {{ trips | beginningToEnd }}<br>
-          <b>Prix :</b> ${{ trips | calculatePrice(villeDepart, villeArrive)}}
+          <b>Prix par personne :</b> ${{ trips | calculatePrice(villeDepart, villeArrive, 1)}}
         </div>
       </div>
     </div>
@@ -40,9 +40,15 @@
       </div>
     </div>
     <br>
-    <button class="btn btn-success btn-lg" data-toggle="modal" v-if="canReserve" data-target="#paymentModal">
+    <div class="form-inline justify-content-center" v-if="canReserve">
+      <label for="places">Nombre de places à réserver</label>
+      <select name="places" id="places" class="custom-select" v-model="placesToReserve">
+        <option v-for="i in remainingPlaces" v-bind:key="i" :name="i">{{i}}</option>
+      </select>
+      <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#paymentModal">
         Réserver
-    </button>
+      </button>
+    </div>
 
     <button class="btn btn-danger btn-lg" v-if="hasReserved" v-on:click="cancelReservation()">
         Annuler réservation
@@ -60,7 +66,7 @@
         </div>
         <div class="modal-body">
           Pour pouvoir faire la réservation, il faut d'abord procéder au paiement de
-          <strong>${{ trips | calculatePrice(villeDepart, villeArrive)}}</strong>.
+          <strong>${{ trips | calculatePrice(villeDepart, villeArrive, Number.parseInt(placesToReserve))}}</strong>.
           <hr>
 
           <label for="paiementInput">Veuillez entrer un montant</label>
@@ -85,6 +91,7 @@
     data() {
       return {
         reservationUser: '',
+        placesToReserve: 1,
         travel: [],
         trips: [],
         villeDepart: this.$route.params.depart,
@@ -117,11 +124,12 @@
       reserverVoyage() {
         // Creation de la reservation
         let user = localStorage.getItem("userId");
-        let price = this.$options.filters.calculatePrice(this.trips, this.villeDepart, this.villeArrive);
+        let price = this.$options.filters.calculatePrice(this.trips, this.villeDepart, this.villeArrive, this.placesToReserve);
 
         this.$http.post("reservations", {
           paid: true,
           price: price,
+          place: Number.parseInt(this.placesToReserve),
           owner: user
         }).then(reservation => {
           let reservationId = reservation.data.id;
@@ -174,11 +182,7 @@
         });
       },
     processPaiementByBank: function() {
-        if (this.montant == this.$options.filters.calculatePrice(this.trips, this.villeDepart, this.villeArrive)) {
-            return true;
-        }
-
-        return false;
+        return this.montant == this.$options.filters.calculatePrice(this.trips, this.villeDepart, this.villeArrive, Number.parseInt(this.placesToReserve));
      }
     },
     filters: {
@@ -193,7 +197,7 @@
         });
         return villesArray.join(", ");
       },
-      calculatePrice: function (trips, villeDepart, villeArrive) {
+      calculatePrice: function (trips, villeDepart, villeArrive, placesToReserve) {
         let sum = 0;
         for (let trip of trips) {
           if (trip.beginLocation.localeCompare(villeDepart) === 0 &&
@@ -205,6 +209,8 @@
             sum += trip.price;
           }
         }
+        // On multiplie la somme par le nombre de réservations
+        sum = sum * placesToReserve;
         return sum;
       }
     },
